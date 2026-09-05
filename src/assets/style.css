@@ -1,0 +1,563 @@
+/* =====================================================
+   PLAYTOPIA RATING SYSTEM
+   Theme Version 2.0
+=====================================================*/
+
+:root{
+
+    --primary:#0057B8;
+    --primary-light:#2B7FFF;
+    --secondary:#7B4DFF;
+    --accent:#F72585;
+
+    --white:#ffffff;
+    --background:#F4F8FD;
+
+    --text:#263238;
+    --border:#E4EAF3;
+
+    --shadow:
+        0 10px 25px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+}
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    background:linear-gradient(
+        180deg,
+        #F8FBFF,
+        #EDF5FF
+    );
+
+    font-family:
+    "Segoe UI",
+    sans-serif;
+
+    color:var(--text);
+
+}
+
+
+
+/*=====================================
+ NAVBAR
+======================================*/
+
+.navbar{
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--primary),
+        var(--secondary),
+        var(--accent)
+    ) !important;
+
+    height:78px;
+
+    padding:0 20px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.15);
+
+}
+
+.navbar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:white !important;
+
+    text-decoration:none;
+
+    letter-spacing:.3px;
+
+}
+
+.navbar-brand:hover{
+
+    color:white;
+
+}
+
+.playtopia-logo{
+
+    width:55px;
+
+    height:55px;
+
+     margin-left:9px;
+
+    background:white;
+
+    border-radius:16px;
+
+    object-fit:contain;
+
+    padding:6px;
+
+    box-shadow:
+
+    0 8px 20px rgba(0,0,0,.15);
+
+    transition:.3s;
+
+}
+
+.playtopia-logo:hover{
+
+    transform:scale(1.08);
+
+}
+
+.nav-link{
+
+    color:white !important;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    padding:12px 18px !important;
+
+    margin:0 4px;
+
+    border-radius:14px;
+
+    transition:.3s;
+
+}
+
+.nav-link:hover{
+
+    background:rgba(255,255,255,.15);
+
+}
+
+.nav-link.active{
+
+    background:white;
+
+    color:var(--primary)!important;
+
+    box-shadow:
+
+    0 5px 15px rgba(0,0,0,.15);
+
+}
+
+
+
+/*=====================================
+ BUTTON
+======================================*/
+
+.btn{
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+.btn-primary{
+
+    background:var(--primary);
+
+    border:none;
+
+}
+
+.btn-primary:hover{
+
+    background:#00489b;
+
+}
+
+.btn-success{
+
+    background:var(--accent);
+
+    border:none;
+
+}
+
+.btn-success:hover{
+
+    background:#dc1874;
+
+}
+
+.btn-danger{
+
+    border:none;
+
+}
+
+.btn-warning{
+
+    color:white;
+
+}
+
+
+
+/*=====================================
+ CARD
+======================================*/
+
+.card{
+
+    border:none;
+
+    border-radius:22px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.card-header{
+
+    background:white;
+
+    color:var(--primary);
+
+    font-size:24px;
+
+    font-weight:700;
+
+    border:none;
+
+    position:relative;
+
+    padding:20px 24px;
+
+}
+
+.card-header::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:6px;
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        var(--primary),
+
+        var(--secondary),
+
+        var(--accent)
+
+    );
+
+}
+
+
+
+/*=====================================
+ INPUT
+======================================*/
+
+.form-control,
+
+.form-select{
+
+    height:52px;
+
+    border-radius:14px;
+
+    border:1px solid var(--border);
+
+    box-shadow:none;
+
+}
+
+.form-control:focus,
+
+.form-select:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+
+    0 0 0 .2rem rgba(0,87,184,.15);
+
+}
+
+
+
+/*=====================================
+ TABLE
+======================================*/
+
+.table{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+.table thead{
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        var(--primary),
+
+        var(--secondary)
+
+    );
+
+    color:white;
+
+}
+
+.table th{
+
+    border:none;
+
+    padding:16px;
+
+    font-size:15px;
+
+}
+
+.table td{
+
+    padding:15px;
+
+    vertical-align:middle;
+
+}
+
+.table tbody tr{
+
+    transition:.25s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#F4F9FF;
+
+}
+
+
+
+/*=====================================
+ TITLE
+======================================*/
+
+h2{
+
+    color:var(--primary);
+
+    font-size:42px;
+
+    font-weight:800;
+
+}
+
+h4{
+
+    color:var(--primary);
+
+}
+
+
+
+/*=====================================
+ RATING CARD
+======================================*/
+
+.rating-card{
+
+    text-align:center;
+
+    padding:20px;
+
+}
+
+.rating-card-icon{
+
+    font-size:60px;
+
+    margin-bottom:12px;
+
+}
+
+.rating-card h5{
+
+    font-size:28px;
+
+    font-weight:800;
+
+    color:var(--primary);
+
+}
+
+.rating-card small{
+
+    color:#F72585;
+
+    font-size:16px;
+
+}
+
+.rating-card p{
+
+    color:#6b7280;
+
+    margin-top:15px;
+
+}
+
+
+
+/*=====================================
+ BADGE
+======================================*/
+
+.badge{
+
+    border-radius:20px;
+
+    padding:8px 14px;
+
+    font-size:13px;
+
+}
+
+
+
+/*=====================================
+ SEARCH
+======================================*/
+
+.search-box{
+
+    position:relative;
+
+}
+
+.search-box i{
+
+    position:absolute;
+
+    top:16px;
+
+    left:16px;
+
+    color:#999;
+
+}
+
+.search-box input{
+
+    padding-left:42px;
+
+}
+
+
+
+/*=====================================
+ SCROLLBAR
+======================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:linear-gradient(
+
+        var(--primary),
+
+        var(--accent)
+
+    );
+
+    border-radius:20px;
+
+}
+
+
+
+/*=====================================
+ ANIMATION
+======================================*/
+
+.fade-up{
+
+    animation:fadeUp .5s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
