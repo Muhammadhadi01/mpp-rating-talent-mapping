@@ -560,4 +560,256 @@ h4{
 
     }
 
+
+
+/* =====================================================
+   PLAYTOPIA RATING
+   RESPONSIVE NAVBAR MOBILE
+===================================================== */
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+
+        height: auto !important;
+
+        min-height: 70px;
+
+        padding: 10px 14px;
+
+        position: relative;
+
+        z-index: 1000;
+
+    }
+
+
+    /* =========================
+       BRAND
+    ========================= */
+
+    .navbar-brand {
+
+        font-size: 20px !important;
+
+        gap: 9px;
+
+        color: #ffffff !important;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* =========================
+       LOGO
+    ========================= */
+
+    .playtopia-logo {
+
+        width: 45px;
+
+        height: 45px;
+
+        margin-left: 0;
+
+        border-radius: 12px;
+
+        padding: 5px;
+
+    }
+
+
+    /* =========================
+       HAMBURGER
+    ========================= */
+
+    .navbar-toggler {
+
+        border: 2px solid rgba(255,255,255,.8);
+
+        border-radius: 10px;
+
+        padding: 7px 9px;
+
+        margin-left: auto;
+
+    }
+
+
+    .navbar-toggler:focus {
+
+        box-shadow:
+
+        0 0 0 .2rem rgba(255,255,255,.25);
+
+    }
+
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    .navbar-collapse {
+
+        width: 100%;
+
+        margin-top: 12px;
+
+        padding: 10px 0 8px;
+
+        border-top:
+
+        1px solid rgba(255,255,255,.25);
+
+    }
+
+
+    /* =========================
+       NAV LIST
+    ========================= */
+
+    .navbar-nav {
+
+        width: 100%;
+
+        margin: 0 !important;
+
+    }
+
+
+    .nav-item {
+
+        width: 100%;
+
+    }
+
+
+    /* =========================
+       NAV LINK
+    ========================= */
+
+    .nav-link {
+
+        display: flex;
+
+        align-items: center;
+
+        width: 100%;
+
+        color: #ffffff !important;
+
+        font-size: 16px;
+
+        font-weight: 600;
+
+        padding: 12px 15px !important;
+
+        margin: 3px 0;
+
+        border-radius: 12px;
+
+        transition: .2s;
+
+    }
+
+
+    .nav-link i {
+
+        width: 25px;
+
+        text-align: center;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .nav-link:hover {
+
+        background: rgba(255,255,255,.15);
+
+        color: #ffffff !important;
+
+    }
+
+
+    /* =========================
+       ACTIVE MENU
+    ========================= */
+
+    .nav-link.active {
+
+        background: #ffffff;
+
+        color: var(--primary) !important;
+
+        box-shadow:
+
+        0 5px 15px rgba(0,0,0,.12);
+
+    }
+
+
+    .nav-link.active i {
+
+        color: var(--primary) !important;
+
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================= */
+
+    .navbar-logout {
+
+        width: 100%;
+
+        margin-top: 10px;
+
+        margin-bottom: 5px;
+
+        padding: 11px 20px !important;
+
+    }
+
 }
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .navbar {
+
+        padding: 9px 10px;
+
+    }
+
+
+    .navbar-brand {
+
+        font-size: 18px !important;
+
+    }
+
+
+    .playtopia-logo {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+
+    .navbar-toggler {
+
+        padding: 6px 8px;
+
+    }
+
+}}

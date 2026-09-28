@@ -18,6 +18,10 @@ import {
 
 import Swal from "sweetalert2";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+
 export default function Dashboard() {
 
     const [periods, setPeriods] = useState([]);
@@ -471,6 +475,387 @@ export default function Dashboard() {
 
     /*
     ====================================
+    DOWNLOAD RANKING PDF
+    ====================================
+    */
+
+    function downloadRankingPDF() {
+
+        if (!ranking || ranking.length === 0) {
+
+            Swal.fire({
+                icon: "warning",
+                title: "Tidak ada data",
+                text: "Belum ada data ranking untuk periode yang dipilih."
+            });
+
+            return;
+        }
+
+        const selectedPeriodData =
+            periods.find(
+                (period) =>
+                    String(period.id) ===
+                    String(selectedPeriod)
+            );
+
+        const periodName =
+            selectedPeriodData?.nama_periode ||
+            "Periode";
+
+        const doc = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "a4"
+        });
+
+        /*
+        ====================================
+        JUDUL
+        ====================================
+        */
+
+        doc.setFontSize(18);
+        doc.setFont("helvetica", "bold");
+
+        doc.text(
+            "MPP Rating & Talent Mapping",
+            148.5,
+            18,
+            {
+                align: "center"
+            }
+        );
+
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "normal");
+
+        doc.text(
+            `Ranking Karyawan - ${periodName}`,
+            148.5,
+            27,
+            {
+                align: "center"
+            }
+        );
+
+        doc.setFontSize(9);
+
+        doc.text(
+            `Tanggal Download: ${new Date().toLocaleDateString(
+                "id-ID"
+            )}`,
+            148.5,
+            34,
+            {
+                align: "center"
+            }
+        );
+
+        /*
+        ====================================
+        TABEL
+        ====================================
+        */
+
+        const tableData = ranking.map(
+            (item, index) => [
+
+                index + 1,
+
+                item.fullname,
+
+                item.position,
+
+                item.totalKerja,
+
+                item.performance,
+
+                item.leadership,
+
+                item.behavior,
+
+                item.nilai,
+
+                item.rating
+
+            ]
+        );
+
+        autoTable(doc, {
+
+            startY: 42,
+
+            head: [[
+                "No",
+                "Nama Karyawan",
+                "Jabatan",
+                "Penilaian",
+                "Performance",
+                "Leadership",
+                "Behavior",
+                "Total",
+                "Rating"
+            ]],
+
+            body: tableData,
+
+            theme: "grid",
+
+            styles: {
+                fontSize: 8,
+                cellPadding: 3,
+                halign: "center",
+                valign: "middle"
+            },
+
+            headStyles: {
+                fontStyle: "bold",
+                halign: "center"
+            },
+
+            columnStyles: {
+
+                0: {
+                    cellWidth: 10
+                },
+
+                1: {
+                    cellWidth: 45,
+                    halign: "left"
+                },
+
+                2: {
+                    cellWidth: 40,
+                    halign: "left"
+                },
+
+                3: {
+                    cellWidth: 20
+                },
+
+                4: {
+                    cellWidth: 25
+                },
+
+                5: {
+                    cellWidth: 25
+                },
+
+                6: {
+                    cellWidth: 25
+                },
+
+                7: {
+                    cellWidth: 25
+                },
+
+                8: {
+                    cellWidth: 35
+                }
+
+            },
+
+            didDrawPage: function () {
+
+                const pageCount =
+                    doc.internal.getNumberOfPages();
+
+                const currentPage =
+                    doc.internal.getCurrentPageInfo()
+                        .pageNumber;
+
+                doc.setFontSize(8);
+
+                doc.text(
+                    `Halaman ${currentPage} dari ${pageCount}`,
+                    148.5,
+                    202,
+                    {
+                        align: "center"
+                    }
+                );
+
+            }
+
+        });
+
+        /*
+        ====================================
+        DOWNLOAD
+        ====================================
+        */
+
+        const safeFileName =
+            periodName
+                .replace(/[^a-zA-Z0-9\s-]/g, "")
+                .replace(/\s+/g, "_");
+
+        doc.save(
+            `Ranking_${safeFileName}.pdf`
+        );
+    }
+
+    /*
+    ====================================
+    DOWNLOAD RANKING EXCEL
+    ====================================
+    */
+
+    function downloadRankingExcel() {
+
+        if (!ranking || ranking.length === 0) {
+
+            Swal.fire({
+                icon: "warning",
+                title: "Tidak ada data",
+                text: "Belum ada data ranking untuk periode yang dipilih."
+            });
+
+            return;
+        }
+
+        const selectedPeriodData =
+            periods.find(
+                (period) =>
+                    String(period.id) ===
+                    String(selectedPeriod)
+            );
+
+        const periodName =
+            selectedPeriodData?.nama_periode ||
+            "Periode";
+
+        /*
+        ====================================
+        DATA EXCEL
+        ====================================
+        */
+
+        const excelData = ranking.map(
+            (item, index) => ({
+
+                "No":
+                    index + 1,
+
+                "Nama Karyawan":
+                    item.fullname,
+
+                "Jabatan":
+                    item.position,
+
+                "Jumlah Penilaian":
+                    item.totalKerja,
+
+                "Performance":
+                    item.performance,
+
+                "Leadership":
+                    item.leadership,
+
+                "Behavior":
+                    item.behavior,
+
+                "Total":
+                    item.nilai,
+
+                "Rating":
+                    item.rating
+
+            })
+        );
+
+        /*
+        ====================================
+        BUAT WORKBOOK
+        ====================================
+        */
+
+        const worksheet =
+            XLSX.utils.json_to_sheet(
+                excelData
+            );
+
+        /*
+        ====================================
+        ATUR LEBAR KOLOM
+        ====================================
+        */
+
+        worksheet["!cols"] = [
+
+            {
+                wch: 6
+            },
+
+            {
+                wch: 28
+            },
+
+            {
+                wch: 25
+            },
+
+            {
+                wch: 18
+            },
+
+            {
+                wch: 15
+            },
+
+            {
+                wch: 15
+            },
+
+            {
+                wch: 15
+            },
+
+            {
+                wch: 15
+            },
+
+            {
+                wch: 22
+            }
+
+        ];
+
+        /*
+        ====================================
+        WORKBOOK
+        ====================================
+        */
+
+        const workbook =
+            XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Ranking"
+        );
+
+        /*
+        ====================================
+        DOWNLOAD
+        ====================================
+        */
+
+        const safeFileName =
+            periodName
+                .replace(/[^a-zA-Z0-9\s-]/g, "")
+                .replace(/\s+/g, "_");
+
+        XLSX.writeFile(
+            workbook,
+            `Ranking_${safeFileName}.xlsx`
+        );
+    }
+
+    /*
+    ====================================
     CHART DATA
     ====================================
     */
@@ -596,9 +981,9 @@ export default function Dashboard() {
                     <div className="col-md-4 mb-3">
 
                         <RatingCard
-                            title="PERFORMA"
-                            subtitle="Kinerja"
-                            description="Mengukur hasil pekerjaan, produktivitas, kualitas kerja, dan pencapaian target karyawan."
+                            title="PERFORMANCE"
+                            subtitle="PF"
+                            description="Akurasi Transaksi Kasir, Kepatuhan SOP Keselamatan wahana, ketelitian laporan harian, dan kebersihan area kerja."
                             icon="⭐"
                         />
 
@@ -608,9 +993,9 @@ export default function Dashboard() {
                     <div className="col-md-4 mb-3">
 
                         <RatingCard
-                            title="KEPEMIMPINAN"
-                            subtitle="Leadership"
-                            description="Mengukur kemampuan memimpin, mengambil keputusan, dan mengarahkan anggota tim."
+                            title="POTENSIAL"
+                            subtitle="PT"
+                            description="Kemampuan problem solving saat ada kendala di lapangan, kemauan belajar hal baru, komuniksi antar tim, dan inisiatif mengambil tanggung jawab lebih"
                             icon="👑"
                         />
 
@@ -620,9 +1005,9 @@ export default function Dashboard() {
                     <div className="col-md-4 mb-3">
 
                         <RatingCard
-                            title="ETIKA"
-                            subtitle="Tingkah Laku"
-                            description="Mengukur sikap kerja, kedisiplinan, tanggung jawab, dan perilaku profesional."
+                            title="BEHAVIOR"
+                            subtitle="BV"
+                            description="Kecepatan dan keramahan pelayanan (hospitality ke costumer), kejujuran/integritas(penanganan aset & uang), serta etika menghargai rekan kerja dan atasan "
                             icon="⚖️"
                         />
 
@@ -634,6 +1019,56 @@ export default function Dashboard() {
                 {/* =========================
                     RANKING
                 ========================= */}
+
+                <div className="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+                        <h4 className="fw-bold mb-1">
+                            Ranking Karyawan
+                        </h4>
+
+                        <p className="text-muted mb-0">
+                            Ranking berdasarkan nilai rata-rata
+                            pada periode yang dipilih.
+                        </p>
+                    </div>
+
+
+                    {ranking.length > 0 && (
+
+                        <div className="d-flex gap-2">
+
+                            <button
+                                type="button"
+                                className="btn btn-danger btn-sm"
+                                onClick={downloadRankingPDF}
+                            >
+
+                                <i className="bi bi-file-earmark-pdf me-2"></i>
+
+                                Download PDF
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                className="btn btn-success btn-sm"
+                                onClick={downloadRankingExcel}
+                            >
+
+                                <i className="bi bi-file-earmark-excel me-2"></i>
+
+                                Download Excel
+
+                            </button>
+
+                        </div>
+
+                    )}
+
+                </div>
+
 
                 <RankingTable
                     data={ranking}
