@@ -4,37 +4,29 @@ import RatingCard from "../components/RatingCard";
 import RankingTable from "../components/RankingTable";
 import { supabase } from "../lib/supabase";
 import { getCurrentUserRole } from "../lib/auth";
-import Swal from "sweetalert2";
 
 import {
+    ResponsiveContainer,
     BarChart,
     Bar,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-    ResponsiveContainer
+    Legend
 } from "recharts";
 
+import Swal from "sweetalert2";
 
 export default function Dashboard() {
 
-    // =====================================================
-    // STATE
-    // =====================================================
-
     const [periods, setPeriods] = useState([]);
-
     const [selectedPeriod, setSelectedPeriod] = useState("");
-
     const [ranking, setRanking] = useState([]);
 
     const [role, setRole] = useState(null);
 
     const [showPeriodModal, setShowPeriodModal] = useState(false);
-
-    const [savingPeriod, setSavingPeriod] = useState(false);
 
     const [periodForm, setPeriodForm] = useState({
         nama_periode: "",
@@ -43,43 +35,42 @@ export default function Dashboard() {
         status: "Aktif"
     });
 
+    const [savingPeriod, setSavingPeriod] = useState(false);
 
-    // =====================================================
-    // LOAD AWAL
-    // =====================================================
+    /*
+    ====================================
+    LOAD AWAL
+    ====================================
+    */
 
     useEffect(() => {
-
         loadRole();
-
         loadPeriods();
-
     }, []);
 
-
-    // =====================================================
-    // LOAD ROLE
-    // =====================================================
+    /*
+    ====================================
+    LOAD ROLE
+    ====================================
+    */
 
     async function loadRole() {
 
         const currentRole = await getCurrentUserRole();
 
         setRole(currentRole);
-
     }
 
-
-    // =====================================================
-    // LOAD PERIOD
-    // =====================================================
+    /*
+    ====================================
+    LOAD PERIODE
+    ====================================
+    */
 
     async function loadPeriods(selectLatest = false) {
 
         const { data, error } = await supabase
-
             .from("periods")
-
             .select(`
                 id,
                 nama_periode,
@@ -88,67 +79,60 @@ export default function Dashboard() {
                 status,
                 created_at
             `)
-
             .order("tanggal_mulai", {
                 ascending: false
             });
 
-
         if (error) {
 
-            console.error("Gagal mengambil periode:", error);
+            console.log(
+                "Gagal mengambil periode:",
+                error
+            );
 
             return;
-
         }
-
 
         const periodData = data || [];
 
         setPeriods(periodData);
 
+        /*
+        ====================================
+        PILIH PERIODE TERBARU
+        ====================================
+        */
 
         if (periodData.length > 0) {
 
-            if (selectLatest) {
+            if (
+                !selectedPeriod ||
+                selectLatest
+            ) {
 
-                setSelectedPeriod(periodData[0].id);
+                setSelectedPeriod(
+                    periodData[0].id
+                );
 
-                loadDashboard(periodData[0].id);
+                loadDashboard(
+                    periodData[0].id
+                );
 
             }
 
-            else if (!selectedPeriod) {
+        } else {
 
-                setSelectedPeriod(periodData[0].id);
-
-                loadDashboard(periodData[0].id);
-
-            }
+            setSelectedPeriod("");
+            setRanking([]);
 
         }
-
     }
 
-
-    // =====================================================
-    // CHANGE PERIOD
-    // =====================================================
-
-    function handlePeriodChange(event) {
-
-        const periodId = event.target.value;
-
-        setSelectedPeriod(periodId);
-
-        loadDashboard(periodId);
-
-    }
-
-
-    // =====================================================
-    // LOAD DASHBOARD
-    // =====================================================
+    /*
+    ====================================
+    LOAD DASHBOARD
+    ====================================
+    */
 
     async function loadDashboard(periodId) {
 
@@ -157,14 +141,10 @@ export default function Dashboard() {
             setRanking([]);
 
             return;
-
         }
 
-
         const { data, error } = await supabase
-
             .from("assessments")
-
             .select(`
                 id,
                 employee_id,
@@ -175,250 +155,218 @@ export default function Dashboard() {
                 total,
                 created_at,
                 employees (
-                    id,
                     nama,
                     jabatan
                 )
             `)
-
-            .eq("period_id", periodId)
-
-            .order("created_at", {
-                ascending: true
-            });
-
+            .eq("period_id", periodId);
 
         if (error) {
 
-            console.error(
-                "Gagal mengambil data penilaian:",
+            console.log(
+                "Gagal mengambil data dashboard:",
                 error
             );
 
             setRanking([]);
 
             return;
-
         }
-
 
         if (!data || data.length === 0) {
 
             setRanking([]);
 
             return;
-
         }
 
-
-        // =================================================
-        // REKAP PER KARYAWAN
-        // =================================================
+        /*
+        ====================================
+        REKAP SEMUA PENILAIAN
+        PER KARYAWAN
+        ====================================
+        */
 
         const employees = {};
-
 
         data.forEach((item) => {
 
             const employeeId = item.employee_id;
 
-            const employeeName =
-                item.employees?.nama || "Tanpa Nama";
-
-
             if (!employees[employeeId]) {
 
                 employees[employeeId] = {
 
-                    id: employeeId,
+                    employeeId,
 
-                    nama: employeeName,
+                    fullname:
+                        item.employees?.nama || "-",
 
-                    jabatan:
+                    position:
                         item.employees?.jabatan || "-",
 
-                    jumlahInput: 0,
+                    totalKerja: 0,
 
-                    pf: 0,
+                    performance: 0,
 
-                    pt: 0,
+                    leadership: 0,
 
-                    bv: 0,
+                    behavior: 0,
 
-                    total: 0
+                    nilai: 0
 
                 };
-
             }
 
+            /*
+            ====================================
+            SETIAP INPUT = 1 PENILAIAN
+            ====================================
+            */
 
-            employees[employeeId].jumlahInput += 1;
+            employees[employeeId].totalKerja++;
 
-
-            employees[employeeId].pf +=
+            employees[employeeId].performance +=
                 Number(item.pf) || 0;
 
-
-            employees[employeeId].pt +=
+            employees[employeeId].leadership +=
                 Number(item.pt) || 0;
 
-
-            employees[employeeId].bv +=
+            employees[employeeId].behavior +=
                 Number(item.bv) || 0;
 
+            /*
+            ====================================
+            TOTAL SATU INPUT
+            ====================================
+            */
 
-            employees[employeeId].total +=
-                Number(item.total) || 0;
+            const total =
+                item.total !== null &&
+                item.total !== undefined
+                    ? Number(item.total)
+                    : (
+                        (
+                            Number(item.pf) +
+                            Number(item.pt) +
+                            Number(item.bv)
+                        ) / 3
+                    );
+
+            employees[employeeId].nilai += total;
 
         });
 
-
-        // =================================================
-        // HITUNG RATA-RATA
-        // =================================================
+        /*
+        ====================================
+        HITUNG RATA-RATA
+        ====================================
+        */
 
         const result = Object.values(employees)
+            .map((item) => {
 
-            .map((employee) => {
+                const avgPerformance =
+                    item.performance /
+                    item.totalKerja;
 
-                const jumlah =
-                    employee.jumlahInput || 1;
+                const avgLeadership =
+                    item.leadership /
+                    item.totalKerja;
 
+                const avgBehavior =
+                    item.behavior /
+                    item.totalKerja;
 
-                const averagePF =
-                    employee.pf / jumlah;
+                const avgNilai =
+                    item.nilai /
+                    item.totalKerja;
 
+                let rating;
 
-                const averagePT =
-                    employee.pt / jumlah;
-
-
-                const averageBV =
-                    employee.bv / jumlah;
-
-
-                const averageTotal =
-                    employee.total / jumlah;
-
-
-                let rating = "Need Improvement";
-
-
-                if (averageTotal >= 90) {
+                if (avgNilai >= 90) {
 
                     rating = "Excellent";
 
-                }
-
-                else if (averageTotal >= 80) {
+                } else if (avgNilai >= 80) {
 
                     rating = "Very Good";
 
-                }
-
-                else if (averageTotal >= 70) {
+                } else if (avgNilai >= 70) {
 
                     rating = "Good";
 
-                }
+                } else {
 
+                    rating = "Need Improvement";
+                }
 
                 return {
 
-                    ...employee,
+                    employeeId:
+                        item.employeeId,
 
-                    averagePF:
-                        Number(averagePF.toFixed(1)),
+                    fullname:
+                        item.fullname,
 
-                    averagePT:
-                        Number(averagePT.toFixed(1)),
+                    position:
+                        item.position,
 
-                    averageBV:
-                        Number(averageBV.toFixed(1)),
+                    totalKerja:
+                        item.totalKerja,
 
-                    averageTotal:
-                        Number(averageTotal.toFixed(1)),
+                    performance:
+                        avgPerformance
+                            .toFixed(1) + "%",
+
+                    leadership:
+                        avgLeadership
+                            .toFixed(1) + "%",
+
+                    behavior:
+                        avgBehavior
+                            .toFixed(1) + "%",
+
+                    nilai:
+                        avgNilai
+                            .toFixed(1) + "%",
 
                     rating
 
                 };
 
-            })
+            });
 
+        /*
+        ====================================
+        SORT NILAI TERTINGGI
+        ====================================
+        */
 
-            .sort(
+        result.sort((a, b) => {
 
-                (a, b) =>
-                    b.averageTotal -
-                    a.averageTotal
-
+            return (
+                parseFloat(b.nilai) -
+                parseFloat(a.nilai)
             );
-
-
-        setRanking(result);
-
-    }
-
-
-    // =====================================================
-    // TAMBAH PERIODE
-    // =====================================================
-
-    function openPeriodModal() {
-
-        if (role !== "admin") return;
-
-
-        setPeriodForm({
-
-            nama_periode: "",
-
-            tanggal_mulai: "",
-
-            tanggal_selesai: "",
-
-            status: "Aktif"
 
         });
 
-
-        setShowPeriodModal(true);
-
+        setRanking(result);
     }
 
-
-    function closePeriodModal() {
-
-        if (savingPeriod) return;
-
-        setShowPeriodModal(false);
-
-    }
-
-
-    function handlePeriodFormChange(event) {
-
-        const {
-            name,
-            value
-        } = event.target;
-
-
-        setPeriodForm((previous) => ({
-
-            ...previous,
-
-            [name]: value
-
-        }));
-
-    }
-
+    /*
+    ====================================
+    TAMBAH PERIODE
+    ====================================
+    */
 
     async function addPeriod() {
 
-        if (role !== "admin") return;
+        if (role !== "admin") {
 
+            return;
+        }
 
         if (
             !periodForm.nama_periode ||
@@ -427,20 +375,13 @@ export default function Dashboard() {
         ) {
 
             Swal.fire({
-
                 icon: "warning",
-
                 title: "Data belum lengkap",
-
-                text:
-                    "Nama periode, tanggal mulai, dan tanggal selesai wajib diisi."
-
+                text: "Silakan lengkapi nama periode dan tanggal."
             });
 
             return;
-
         }
-
 
         if (
             periodForm.tanggal_selesai <
@@ -448,458 +389,327 @@ export default function Dashboard() {
         ) {
 
             Swal.fire({
-
                 icon: "warning",
-
                 title: "Tanggal tidak valid",
-
-                text:
-                    "Tanggal selesai tidak boleh sebelum tanggal mulai."
-
+                text: "Tanggal selesai tidak boleh sebelum tanggal mulai."
             });
 
             return;
-
         }
-
 
         setSavingPeriod(true);
 
-
-        const { error } = await supabase
-
+        const { data, error } = await supabase
             .from("periods")
+            .insert([
+                {
+                    nama_periode:
+                        periodForm.nama_periode,
 
-            .insert({
+                    tanggal_mulai:
+                        periodForm.tanggal_mulai,
 
-                nama_periode:
-                    periodForm.nama_periode,
+                    tanggal_selesai:
+                        periodForm.tanggal_selesai,
 
-                tanggal_mulai:
-                    periodForm.tanggal_mulai,
-
-                tanggal_selesai:
-                    periodForm.tanggal_selesai,
-
-                status:
-                    periodForm.status
-
-            });
-
+                    status:
+                        periodForm.status
+                }
+            ])
+            .select()
+            .single();
 
         setSavingPeriod(false);
-
 
         if (error) {
 
             console.error(
-                "Gagal menambah periode:",
+                "Gagal menambahkan periode:",
                 error
             );
 
-
             Swal.fire({
-
                 icon: "error",
-
                 title: "Gagal",
-
-                text:
-                    "Periode gagal ditambahkan."
-
+                text: error.message
             });
 
             return;
-
         }
 
+        /*
+        ====================================
+        RESET FORM
+        ====================================
+        */
+
+        setPeriodForm({
+            nama_periode: "",
+            tanggal_mulai: "",
+            tanggal_selesai: "",
+            status: "Aktif"
+        });
 
         setShowPeriodModal(false);
 
+        /*
+        ====================================
+        UPDATE PERIODE
+        ====================================
+        */
 
         await loadPeriods(true);
 
-
         Swal.fire({
-
             icon: "success",
-
-            title: "Berhasil",
-
-            text:
-                "Periode berhasil ditambahkan.",
-
+            title: "Periode berhasil dibuat",
+            text: data?.nama_periode || "",
             timer: 1800,
-
             showConfirmButton: false
-
         });
-
     }
 
+    /*
+    ====================================
+    CHART DATA
+    ====================================
+    */
 
-    // =====================================================
-    // DATA CHART
-    // =====================================================
+    const chartData = ranking.map((item) => {
 
-    const chartData = ranking.map((employee) => ({
+        return {
 
-        nama: employee.nama,
+            name: item.fullname,
 
-        Performance: employee.averagePF,
+            Performance:
+                parseFloat(item.performance),
 
-        Potential: employee.averagePT,
+            Leadership:
+                parseFloat(item.leadership),
 
-        Behavior: employee.averageBV,
+            Behavior:
+                parseFloat(item.behavior),
 
-        Total: employee.averageTotal
+            Total:
+                parseFloat(item.nilai)
 
-    }));
+        };
 
-
-    // =====================================================
-    // RENDER
-    // =====================================================
+    });
 
     return (
 
         <>
-
             <Navbar />
 
+            <div className="container mt-4">
 
-            <main className="container-fluid px-3 px-md-4 py-4">
+                {/* HEADER */}
 
+                <h2 className="fw-bold">
+                    MPP Rating & Talent Mapping
+                </h2>
 
-                {/* =================================================
-                    TITLE
-                ================================================= */}
 
-                <div className="dashboard-title mb-4">
+                {/* =========================
+                    PERIODE
+                ========================= */}
 
-                    <h2 className="mb-1">
+                <div className="mt-4">
 
-                        MPP Rating & Talent Mapping
+                    <div className="d-flex justify-content-between align-items-end mb-2">
 
-                    </h2>
+                        <label className="fw-bold mb-0">
+                            Periode
+                        </label>
 
-                    <p className="text-muted mb-0">
+                        {role === "admin" && (
 
-                        Sistem penilaian dan pemetaan talent karyawan
+                            <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                    setShowPeriodModal(true)
+                                }
+                            >
 
-                    </p>
+                                <i className="bi bi-plus-circle me-2"></i>
 
-                </div>
+                                Tambah Periode
 
-
-                {/* =================================================
-                    RATING CARDS
-                ================================================= */}
-
-                <div className="row g-4 mb-4">
-
-
-                    {/* PERFORMANCE */}
-
-                    <div className="col-12 col-lg-4">
-
-                        <RatingCard
-
-                            icon="⭐"
-
-                            title="PERFORMANCE (PF)"
-
-                            subtitle=""
-
-                            description="
-                                Akurasi transaksi kasir,
-                                kepatuhan SOP keselamatan
-                                wahana, ketelitian laporan
-                                harian, dan kebersihan area
-                                kerja.
-                            "
-
-                        />
-
-                    </div>
-
-
-                    {/* POTENTIAL */}
-
-                    <div className="col-12 col-lg-4">
-
-                        <RatingCard
-
-                            icon="⭐"
-
-                            title="POTENTIAL (PT)"
-
-                            subtitle=""
-
-                            description="
-                                Kemampuan problem solving
-                                saat ada kendala di lapangan,
-                                kemauan belajar hal baru,
-                                komunikasi antar tim, dan
-                                inisiatif mengambil tanggung
-                                jawab lebih.
-                            "
-
-                        />
-
-                    </div>
-
-
-                    {/* BEHAVIOR */}
-
-                    <div className="col-12 col-lg-4">
-
-                        <RatingCard
-
-                            icon="⭐"
-
-                            title="BEHAVIOR (BV)"
-
-                            subtitle=""
-
-                            description="
-                                Kecepatan dan keramahan
-                                pelayanan (hospitality ke
-                                customer), kejujuran/integritas
-                                (penanganan aset & uang), serta
-                                etika menghargai rekan kerja
-                                dan atasan.
-                            "
-
-                        />
-
-                    </div>
-
-                </div>
-
-
-                {/* =================================================
-                    PERIOD
-                ================================================= */}
-
-                <div className="card mb-4">
-
-                    <div className="card-body p-3 p-md-4">
-
-
-                        <div className="
-                            d-flex
-                            flex-column
-                            flex-md-row
-                            justify-content-between
-                            align-items-md-center
-                            gap-3
-                        ">
-
-
-                            <div>
-
-                                <label
-                                    className="
-                                        fw-bold
-                                        mb-2
-                                        d-block
-                                    "
-                                >
-
-                                    Periode
-
-                                </label>
-
-
-                                <select
-
-                                    className="form-select period-select"
-
-                                    value={selectedPeriod}
-
-                                    onChange={
-                                        handlePeriodChange
-                                    }
-
-                                >
-
-                                    {periods.length === 0 && (
-
-                                        <option value="">
-
-                                            Belum ada periode
-
-                                        </option>
-
-                                    )}
-
-
-                                    {periods.map((period) => (
-
-                                        <option
-                                            key={period.id}
-                                            value={period.id}
-                                        >
-
-                                            {period.nama_periode}
-
-                                        </option>
-
-                                    ))}
-
-                                </select>
-
-                            </div>
-
-
-                            {role === "admin" && (
-
-                                <button
-
-                                    type="button"
-
-                                    className="
-                                        btn
-                                        btn-primary
-                                        period-add-button
-                                    "
-
-                                    onClick={
-                                        openPeriodModal
-                                    }
-
-                                >
-
-                                    <i className="
-                                        bi
-                                        bi-plus-circle
-                                        me-2
-                                    "></i>
-
-                                    Tambah Periode
-
-                                </button>
-
-                            )}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {/* =================================================
-                    RANKING
-                ================================================= */}
-
-                <div className="card mb-4">
-
-                    <div className="card-header">
-
-                        <i className="
-                            bi
-                            bi-trophy-fill
-                            me-2
-                        "></i>
-
-                        Ranking
-
-                    </div>
-
-
-                    <div className="card-body">
-
-                        {ranking.length === 0 ? (
-
-                            <div className="
-                                text-center
-                                text-muted
-                                py-5
-                            ">
-
-                                <i className="
-                                    bi
-                                    bi-clipboard-x
-                                    display-5
-                                    d-block
-                                    mb-3
-                                "></i>
-
-                                Belum ada data penilaian
-                                pada periode ini.
-
-                            </div>
-
-                        ) : (
-
-                            <RankingTable
-                                ranking={ranking}
-                            />
+                            </button>
 
                         )}
 
                     </div>
 
+
+                    <select
+                        className="form-select"
+                        value={selectedPeriod}
+                        onChange={(e) => {
+
+                            const periodId =
+                                e.target.value;
+
+                            setSelectedPeriod(
+                                periodId
+                            );
+
+                            loadDashboard(
+                                periodId
+                            );
+
+                        }}
+                    >
+
+                        {periods.length === 0 && (
+
+                            <option value="">
+                                Belum ada periode
+                            </option>
+
+                        )}
+
+                        {periods.map((period) => (
+
+                            <option
+                                key={period.id}
+                                value={period.id}
+                            >
+                                {period.nama_periode}
+                            </option>
+
+                        ))}
+
+                    </select>
+
                 </div>
 
 
-                {/* =================================================
-                    COMPARISON CHART
-                ================================================= */}
+                {/* =========================
+                    RATING CARD
+                ========================= */}
 
-                <div className="card mb-4">
+                <div className="row mt-4">
 
-                    <div className="card-header">
+                    <div className="col-md-4 mb-3">
 
-                        <i className="
-                            bi
-                            bi-bar-chart-fill
-                            me-2
-                        "></i>
-
-                        Perbandingan Nilai Karyawan
+                        <RatingCard
+                            title="PERFORMA"
+                            subtitle="Kinerja"
+                            description="Mengukur hasil pekerjaan, produktivitas, kualitas kerja, dan pencapaian target karyawan."
+                            icon="⭐"
+                        />
 
                     </div>
 
 
+                    <div className="col-md-4 mb-3">
+
+                        <RatingCard
+                            title="KEPEMIMPINAN"
+                            subtitle="Leadership"
+                            description="Mengukur kemampuan memimpin, mengambil keputusan, dan mengarahkan anggota tim."
+                            icon="👑"
+                        />
+
+                    </div>
+
+
+                    <div className="col-md-4 mb-3">
+
+                        <RatingCard
+                            title="ETIKA"
+                            subtitle="Tingkah Laku"
+                            description="Mengukur sikap kerja, kedisiplinan, tanggung jawab, dan perilaku profesional."
+                            icon="⚖️"
+                        />
+
+                    </div>
+
+                </div>
+
+
+                {/* =========================
+                    RANKING
+                ========================= */}
+
+                <RankingTable
+                    data={ranking}
+                />
+
+
+                {/* =========================
+                    GRAFIK PERBANDINGAN
+                ========================= */}
+
+                <div className="card border-0 shadow-sm mt-4 mb-5">
+
                     <div className="card-body">
+
+                        <div className="mb-4">
+
+                            <h4 className="fw-bold mb-1">
+                                Grafik Perbandingan Karyawan
+                            </h4>
+
+                            <p className="text-muted mb-0">
+                                Perbandingan nilai rata-rata
+                                Performance, Leadership,
+                                Behavior, dan Total setiap
+                                karyawan pada periode yang dipilih.
+                            </p>
+
+                        </div>
+
 
                         {chartData.length === 0 ? (
 
-                            <div className="
-                                text-center
-                                text-muted
-                                py-5
-                            ">
+                            <div className="text-center py-5">
 
-                                Belum ada data untuk
-                                ditampilkan pada grafik.
+                                <div
+                                    style={{
+                                        fontSize: "3rem"
+                                    }}
+                                >
+                                    📊
+                                </div>
+
+                                <h5 className="fw-bold mt-3">
+                                    Belum Ada Data
+                                </h5>
+
+                                <p className="text-muted mb-0">
+                                    Belum terdapat data penilaian
+                                    untuk periode yang dipilih.
+                                </p>
 
                             </div>
 
                         ) : (
 
                             <div
-                                className="
-                                    dashboard-chart
-                                "
+                                style={{
+                                    width: "100%",
+                                    height: 500
+                                }}
                             >
 
                                 <ResponsiveContainer
                                     width="100%"
-                                    height={400}
+                                    height="100%"
                                 >
 
                                     <BarChart
                                         data={chartData}
                                         margin={{
                                             top: 20,
-                                            right: 20,
-                                            left: 0,
-                                            bottom: 70
+                                            right: 30,
+                                            left: 10,
+                                            bottom: 80
                                         }}
+                                        barGap={4}
                                     >
 
                                         <CartesianGrid
@@ -907,42 +717,50 @@ export default function Dashboard() {
                                         />
 
                                         <XAxis
-
-                                            dataKey="nama"
-
-                                            angle={-35}
-
-                                            textAnchor="end"
-
+                                            dataKey="name"
                                             interval={0}
-
+                                            angle={-30}
+                                            textAnchor="end"
+                                            height={80}
+                                            tick={{
+                                                fontSize: 12
+                                            }}
                                         />
 
                                         <YAxis
                                             domain={[0, 100]}
+                                            tick={{
+                                                fontSize: 12
+                                            }}
                                         />
 
-                                        <Tooltip />
+                                        <Tooltip
+                                            formatter={(value) =>
+                                                `${Number(value).toFixed(1)}`
+                                            }
+                                        />
 
                                         <Legend />
 
                                         <Bar
                                             dataKey="Performance"
-                                            fill="#0057B8"
+                                            name="Performance"
+                                            fill="#0d6efd"
                                             radius={[
-                                                5,
-                                                5,
+                                                4,
+                                                4,
                                                 0,
                                                 0
                                             ]}
                                         />
 
                                         <Bar
-                                            dataKey="Potential"
-                                            fill="#7B4DFF"
+                                            dataKey="Leadership"
+                                            name="Leadership"
+                                            fill="#198754"
                                             radius={[
-                                                5,
-                                                5,
+                                                4,
+                                                4,
                                                 0,
                                                 0
                                             ]}
@@ -950,10 +768,11 @@ export default function Dashboard() {
 
                                         <Bar
                                             dataKey="Behavior"
-                                            fill="#F72585"
+                                            name="Behavior"
+                                            fill="#ffc107"
                                             radius={[
-                                                5,
-                                                5,
+                                                4,
+                                                4,
                                                 0,
                                                 0
                                             ]}
@@ -961,10 +780,11 @@ export default function Dashboard() {
 
                                         <Bar
                                             dataKey="Total"
-                                            fill="#2B7FFF"
+                                            name="Total"
+                                            fill="#dc3545"
                                             radius={[
-                                                5,
-                                                5,
+                                                4,
+                                                4,
                                                 0,
                                                 0
                                             ]}
@@ -982,62 +802,40 @@ export default function Dashboard() {
 
                 </div>
 
+            </div>
 
-            </main>
 
-
-            {/* =====================================================
+            {/* ====================================
                 MODAL TAMBAH PERIODE
-            ===================================================== */}
+            ==================================== */}
 
-            {showPeriodModal && (
+            {showPeriodModal && role === "admin" && (
 
                 <div
-                    className="
-                        modal
-                        fade
-                        show
-                        d-block
-                        dashboard-modal
-                    "
+                    className="modal fade show d-block"
                     tabIndex="-1"
+                    style={{
+                        backgroundColor:
+                            "rgba(0,0,0,0.5)"
+                    }}
                 >
 
-                    <div
-                        className="
-                            modal-dialog
-                            modal-dialog-centered
-                        "
-                    >
+                    <div className="modal-dialog modal-dialog-centered">
 
                         <div className="modal-content">
 
-
                             <div className="modal-header">
 
-                                <h5 className="modal-title">
-
-                                    <i className="
-                                        bi
-                                        bi-calendar-plus
-                                        me-2
-                                    "></i>
-
+                                <h5 className="modal-title fw-bold">
                                     Tambah Periode
-
                                 </h5>
 
-
                                 <button
-
                                     type="button"
-
                                     className="btn-close"
-
-                                    onClick={
-                                        closePeriodModal
+                                    onClick={() =>
+                                        setShowPeriodModal(false)
                                     }
-
                                 ></button>
 
                             </div>
@@ -1045,41 +843,28 @@ export default function Dashboard() {
 
                             <div className="modal-body">
 
-
                                 {/* NAMA PERIODE */}
 
                                 <div className="mb-3">
 
-                                    <label className="
-                                        form-label
-                                        fw-semibold
-                                    ">
-
+                                    <label className="form-label fw-semibold">
                                         Nama Periode
-
                                     </label>
 
                                     <input
-
                                         type="text"
-
-                                        name="nama_periode"
-
                                         className="form-control"
-
-                                        placeholder="
-                                            Contoh:
-                                            Oktober 2026
-                                        "
-
+                                        placeholder="Contoh: September 2026"
                                         value={
                                             periodForm.nama_periode
                                         }
-
-                                        onChange={
-                                            handlePeriodFormChange
+                                        onChange={(e) =>
+                                            setPeriodForm({
+                                                ...periodForm,
+                                                nama_periode:
+                                                    e.target.value
+                                            })
                                         }
-
                                     />
 
                                 </div>
@@ -1089,31 +874,23 @@ export default function Dashboard() {
 
                                 <div className="mb-3">
 
-                                    <label className="
-                                        form-label
-                                        fw-semibold
-                                    ">
-
+                                    <label className="form-label fw-semibold">
                                         Tanggal Mulai
-
                                     </label>
 
                                     <input
-
                                         type="date"
-
-                                        name="tanggal_mulai"
-
                                         className="form-control"
-
                                         value={
                                             periodForm.tanggal_mulai
                                         }
-
-                                        onChange={
-                                            handlePeriodFormChange
+                                        onChange={(e) =>
+                                            setPeriodForm({
+                                                ...periodForm,
+                                                tanggal_mulai:
+                                                    e.target.value
+                                            })
                                         }
-
                                     />
 
                                 </div>
@@ -1123,31 +900,23 @@ export default function Dashboard() {
 
                                 <div className="mb-3">
 
-                                    <label className="
-                                        form-label
-                                        fw-semibold
-                                    ">
-
+                                    <label className="form-label fw-semibold">
                                         Tanggal Selesai
-
                                     </label>
 
                                     <input
-
                                         type="date"
-
-                                        name="tanggal_selesai"
-
                                         className="form-control"
-
                                         value={
                                             periodForm.tanggal_selesai
                                         }
-
-                                        onChange={
-                                            handlePeriodFormChange
+                                        onChange={(e) =>
+                                            setPeriodForm({
+                                                ...periodForm,
+                                                tanggal_selesai:
+                                                    e.target.value
+                                            })
                                         }
-
                                     />
 
                                 </div>
@@ -1155,49 +924,37 @@ export default function Dashboard() {
 
                                 {/* STATUS */}
 
-                                <div className="mb-2">
+                                <div className="mb-3">
 
-                                    <label className="
-                                        form-label
-                                        fw-semibold
-                                    ">
-
+                                    <label className="form-label fw-semibold">
                                         Status
-
                                     </label>
 
                                     <select
-
-                                        name="status"
-
                                         className="form-select"
-
                                         value={
                                             periodForm.status
                                         }
-
-                                        onChange={
-                                            handlePeriodFormChange
+                                        onChange={(e) =>
+                                            setPeriodForm({
+                                                ...periodForm,
+                                                status:
+                                                    e.target.value
+                                            })
                                         }
-
                                     >
 
                                         <option value="Aktif">
-
                                             Aktif
-
                                         </option>
 
                                         <option value="Selesai">
-
                                             Selesai
-
                                         </option>
 
                                     </select>
 
                                 </div>
-
 
                             </div>
 
@@ -1205,51 +962,28 @@ export default function Dashboard() {
                             <div className="modal-footer">
 
                                 <button
-
                                     type="button"
-
                                     className="btn btn-secondary"
-
-                                    onClick={
-                                        closePeriodModal
+                                    onClick={() =>
+                                        setShowPeriodModal(false)
                                     }
-
-                                    disabled={
-                                        savingPeriod
-                                    }
-
                                 >
-
                                     Batal
-
                                 </button>
 
 
                                 <button
-
                                     type="button"
-
                                     className="btn btn-primary"
-
-                                    onClick={
-                                        addPeriod
-                                    }
-
-                                    disabled={
-                                        savingPeriod
-                                    }
-
+                                    onClick={addPeriod}
+                                    disabled={savingPeriod}
                                 >
 
                                     {savingPeriod ? (
 
                                         <>
                                             <span
-                                                className="
-                                                    spinner-border
-                                                    spinner-border-sm
-                                                    me-2
-                                                "
+                                                className="spinner-border spinner-border-sm me-2"
                                             ></span>
 
                                             Menyimpan...
@@ -1259,14 +993,9 @@ export default function Dashboard() {
                                     ) : (
 
                                         <>
-                                            <i className="
-                                                bi
-                                                bi-save
-                                                me-2
-                                            "></i>
+                                            <i className="bi bi-check-circle me-2"></i>
 
-                                            Simpan
-
+                                            Simpan Periode
                                         </>
 
                                     )}
@@ -1274,7 +1003,6 @@ export default function Dashboard() {
                                 </button>
 
                             </div>
-
 
                         </div>
 
@@ -1284,23 +1012,7 @@ export default function Dashboard() {
 
             )}
 
-
-            {/* MODAL BACKDROP */}
-
-            {showPeriodModal && (
-
-                <div
-                    className="
-                        modal-backdrop
-                        fade
-                        show
-                    "
-                ></div>
-
-            )}
-
         </>
 
     );
-
 }

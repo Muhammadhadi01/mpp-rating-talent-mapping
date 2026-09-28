@@ -33,11 +33,9 @@ export default function Navbar() {
     // ACTIVE NAVBAR
     // =========================
     function active(path) {
-
         return location.pathname === path
-            ? "nav-link active fw-bold"
-            : "nav-link";
-
+            ? "nav-link active fw-bold text-white"
+            : "nav-link text-white";
     }
 
     return (
@@ -146,7 +144,7 @@ export default function Navbar() {
                         </li>
 
 
-                        {/* HISTORY PENILAIAN */}
+                        {/* RANKING */}
                         <li className="nav-item">
 
                             <Link
@@ -154,9 +152,9 @@ export default function Navbar() {
                                 className={active("/ranking")}
                             >
 
-                                <i className="bi bi-clock-history me-2"></i>
+                                <i className="bi bi-trophy-fill me-2"></i>
 
-                                History Penilaian
+                                Ranking
 
                             </Link>
 
@@ -186,7 +184,7 @@ export default function Navbar() {
                         LOGOUT
                     ========================= */}
                     <button
-                        className="btn btn-light rounded-pill px-4 fw-semibold navbar-logout"
+                        className="btn btn-light rounded-pill px-4 fw-semibold"
                         onClick={logout}
                     >
 
