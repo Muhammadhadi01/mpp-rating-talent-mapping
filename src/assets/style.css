@@ -3,571 +3,776 @@
    Theme Version 2.0
 =====================================================*/
 
-:root{
+:root {
 
-    --primary:#0057B8;
-    --primary-light:#2B7FFF;
-    --secondary:#7B4DFF;
-    --accent:#F72585;
+    --primary: #0057B8;
 
-    --white:#ffffff;
-    --background:#F4F8FD;
+    --primary-light: #2B7FFF;
 
-    --text:#263238;
-    --border:#E4EAF3;
+    --secondary: #7B4DFF;
+
+    --accent: #F72585;
+
+    --white: #ffffff;
+
+    --background: #F4F8FD;
+
+    --text: #263238;
+
+    --border: #E4EAF3;
 
     --shadow:
         0 10px 25px rgba(0,0,0,.08);
 
-    --radius:18px;
+    --radius: 18px;
 
 }
 
-*{
 
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
 
 }
 
-body{
 
-    background:linear-gradient(
-        180deg,
-        #F8FBFF,
-        #EDF5FF
-    );
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #F8FBFF,
+            #EDF5FF
+        );
 
     font-family:
-    "Segoe UI",
-    sans-serif;
+        "Segoe UI",
+        sans-serif;
 
-    color:var(--text);
+    color: var(--text);
 
-}
-
-
-
-/*=====================================
- NAVBAR
-======================================*/
-
-.navbar{
-
-    background:
-    linear-gradient(
-        90deg,
-        var(--primary),
-        var(--secondary),
-        var(--accent)
-    ) !important;
-
-    height:78px;
-
-    padding:0 20px;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.15);
-
-}
-
-.navbar-brand{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    font-size:30px;
-
-    font-weight:800;
-
-    color:white !important;
-
-    text-decoration:none;
-
-    letter-spacing:.3px;
-
-}
-
-.navbar-brand:hover{
-
-    color:white;
-
-}
-
-.playtopia-logo{
-
-    width:55px;
-
-    height:55px;
-
-     margin-left:9px;
-
-    background:white;
-
-    border-radius:16px;
-
-    object-fit:contain;
-
-    padding:6px;
-
-    box-shadow:
-
-    0 8px 20px rgba(0,0,0,.15);
-
-    transition:.3s;
-
-}
-
-.playtopia-logo:hover{
-
-    transform:scale(1.08);
-
-}
-
-.nav-link{
-
-    color:white !important;
-
-    font-size:17px;
-
-    font-weight:600;
-
-    padding:12px 18px !important;
-
-    margin:0 4px;
-
-    border-radius:14px;
-
-    transition:.3s;
-
-}
-
-.nav-link:hover{
-
-    background:rgba(255,255,255,.15);
-
-}
-
-.nav-link.active{
-
-    background:white;
-
-    color:var(--primary)!important;
-
-    box-shadow:
-
-    0 5px 15px rgba(0,0,0,.15);
+    min-height: 100vh;
 
 }
 
 
 
-/*=====================================
- BUTTON
-======================================*/
+/* =====================================================
+   NAVBAR
+===================================================== */
 
-.btn{
-
-    border-radius:12px;
-
-    font-weight:600;
-
-}
-
-.btn-primary{
-
-    background:var(--primary);
-
-    border:none;
-
-}
-
-.btn-primary:hover{
-
-    background:#00489b;
-
-}
-
-.btn-success{
-
-    background:var(--accent);
-
-    border:none;
-
-}
-
-.btn-success:hover{
-
-    background:#dc1874;
-
-}
-
-.btn-danger{
-
-    border:none;
-
-}
-
-.btn-warning{
-
-    color:white;
-
-}
-
-
-
-/*=====================================
- CARD
-======================================*/
-
-.card{
-
-    border:none;
-
-    border-radius:22px;
-
-    background:white;
-
-    box-shadow:var(--shadow);
-
-    overflow:hidden;
-
-    transition:.3s;
-
-}
-
-.card:hover{
-
-    transform:translateY(-4px);
-
-}
-
-.card-header{
-
-    background:white;
-
-    color:var(--primary);
-
-    font-size:24px;
-
-    font-weight:700;
-
-    border:none;
-
-    position:relative;
-
-    padding:20px 24px;
-
-}
-
-.card-header::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    height:6px;
+.navbar {
 
     background:
 
-    linear-gradient(
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary),
+            var(--accent)
+        ) !important;
 
-        90deg,
+    height: 78px;
 
-        var(--primary),
+    padding: 0 20px;
 
-        var(--secondary),
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
 
-        var(--accent)
+    position: relative;
 
-    );
+    z-index: 1000;
+
+}
+
+
+.navbar-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    color: white !important;
+
+    text-decoration: none;
+
+    letter-spacing: .3px;
+
+}
+
+
+.navbar-brand:hover {
+
+    color: white;
+
+}
+
+
+.playtopia-logo {
+
+    width: 55px;
+
+    height: 55px;
+
+    margin-left: 9px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    object-fit: contain;
+
+    padding: 6px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.15);
+
+    transition: .3s;
+
+}
+
+
+.playtopia-logo:hover {
+
+    transform: scale(1.08);
+
+}
+
+
+.nav-link {
+
+    color: white !important;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    padding: 12px 18px !important;
+
+    margin: 0 4px;
+
+    border-radius: 14px;
+
+    transition: .3s;
+
+}
+
+
+.nav-link:hover {
+
+    background:
+        rgba(255,255,255,.15);
+
+}
+
+
+.nav-link.active {
+
+    background: white;
+
+    color: var(--primary) !important;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.15);
 
 }
 
 
 
-/*=====================================
- INPUT
-======================================*/
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn {
+
+    border-radius: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.btn-primary {
+
+    background: var(--primary);
+
+    border: none;
+
+}
+
+
+.btn-primary:hover {
+
+    background: #00489b;
+
+}
+
+
+.btn-success {
+
+    background: var(--accent);
+
+    border: none;
+
+}
+
+
+.btn-success:hover {
+
+    background: #dc1874;
+
+}
+
+
+.btn-danger {
+
+    border: none;
+
+}
+
+
+.btn-warning {
+
+    color: white;
+
+}
+
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card {
+
+    border: none;
+
+    border-radius: 22px;
+
+    background: white;
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
+
+    transition: .3s;
+
+}
+
+
+.card:hover {
+
+    transform: translateY(-4px);
+
+}
+
+
+.card-header {
+
+    background: white;
+
+    color: var(--primary);
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    border: none;
+
+    position: relative;
+
+    padding: 20px 24px;
+
+}
+
+
+.card-header::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 6px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary),
+            var(--accent)
+        );
+
+}
+
+
+
+/* =====================================================
+   INPUT
+===================================================== */
 
 .form-control,
 
-.form-select{
+.form-select {
 
-    height:52px;
+    height: 52px;
 
-    border-radius:14px;
+    border-radius: 14px;
 
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
 
-    box-shadow:none;
+    box-shadow: none;
 
 }
+
 
 .form-control:focus,
 
-.form-select:focus{
+.form-select:focus {
 
-    border-color:var(--primary);
+    border-color: var(--primary);
 
     box-shadow:
+        0 0 0 .2rem rgba(0,87,184,.15);
 
-    0 0 0 .2rem rgba(0,87,184,.15);
+}
+
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table {
+
+    border-radius: 18px;
+
+    overflow: hidden;
 
 }
 
 
-
-/*=====================================
- TABLE
-======================================*/
-
-.table{
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-}
-
-.table thead{
+.table thead {
 
     background:
 
-    linear-gradient(
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary)
+        );
 
-        90deg,
-
-        var(--primary),
-
-        var(--secondary)
-
-    );
-
-    color:white;
-
-}
-
-.table th{
-
-    border:none;
-
-    padding:16px;
-
-    font-size:15px;
-
-}
-
-.table td{
-
-    padding:15px;
-
-    vertical-align:middle;
-
-}
-
-.table tbody tr{
-
-    transition:.25s;
-
-}
-
-.table tbody tr:hover{
-
-    background:#F4F9FF;
+    color: white;
 
 }
 
 
+.table th {
 
-/*=====================================
- TITLE
-======================================*/
+    border: none;
 
-h2{
+    padding: 16px;
 
-    color:var(--primary);
-
-    font-size:42px;
-
-    font-weight:800;
-
-}
-
-h4{
-
-    color:var(--primary);
+    font-size: 15px;
 
 }
 
 
+.table td {
 
-/*=====================================
- RATING CARD
-======================================*/
+    padding: 15px;
 
-.rating-card{
-
-    text-align:center;
-
-    padding:20px;
-
-}
-
-.rating-card-icon{
-
-    font-size:60px;
-
-    margin-bottom:12px;
-
-}
-
-.rating-card h5{
-
-    font-size:28px;
-
-    font-weight:800;
-
-    color:var(--primary);
-
-}
-
-.rating-card small{
-
-    color:#F72585;
-
-    font-size:16px;
-
-}
-
-.rating-card p{
-
-    color:#6b7280;
-
-    margin-top:15px;
+    vertical-align: middle;
 
 }
 
 
+.table tbody tr {
 
-/*=====================================
- BADGE
-======================================*/
-
-.badge{
-
-    border-radius:20px;
-
-    padding:8px 14px;
-
-    font-size:13px;
+    transition: .25s;
 
 }
 
 
+.table tbody tr:hover {
 
-/*=====================================
- SEARCH
-======================================*/
-
-.search-box{
-
-    position:relative;
-
-}
-
-.search-box i{
-
-    position:absolute;
-
-    top:16px;
-
-    left:16px;
-
-    color:#999;
-
-}
-
-.search-box input{
-
-    padding-left:42px;
+    background: #F4F9FF;
 
 }
 
 
-
-/*=====================================
- SCROLLBAR
-======================================*/
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:linear-gradient(
-
-        var(--primary),
-
-        var(--accent)
-
-    );
-
-    border-radius:20px;
-
-}
-
-
-
-/*=====================================
- ANIMATION
-======================================*/
-
-.fade-up{
-
-    animation:fadeUp .5s ease;
-
-}
-
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
 
 /* =====================================================
-   PLAYTOPIA RATING
-   RESPONSIVE NAVBAR MOBILE
+   TITLE
+===================================================== */
+
+h2 {
+
+    color: var(--primary);
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+}
+
+
+h4 {
+
+    color: var(--primary);
+
+}
+
+
+.dashboard-title h2 {
+
+    line-height: 1.2;
+
+}
+
+
+
+/* =====================================================
+   RATING CARD
+===================================================== */
+
+.rating-card {
+
+    text-align: center;
+
+    padding: 28px 24px;
+
+    min-height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-start;
+
+}
+
+
+.rating-card-icon {
+
+    font-size: 58px;
+
+    line-height: 1;
+
+    margin-bottom: 18px;
+
+}
+
+
+.rating-card h5 {
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: var(--primary);
+
+    line-height: 1.25;
+
+    margin-bottom: 10px;
+
+}
+
+
+.rating-card small {
+
+    color: var(--accent);
+
+    font-size: 16px;
+
+}
+
+
+.rating-card p {
+
+    color: #5f6368;
+
+    margin-top: 16px;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    text-align: center;
+
+}
+
+
+.rating-card p::before {
+
+    content: "";
+
+    display: block;
+
+    width: 80%;
+
+    max-width: 420px;
+
+    height: 2px;
+
+    margin: 0 auto 18px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            #D7DCE5,
+            transparent
+        );
+
+}
+
+
+
+/* =====================================================
+   PERIOD
+===================================================== */
+
+.period-select {
+
+    min-width: 260px;
+
+}
+
+
+.period-add-button {
+
+    min-height: 52px;
+
+    padding: 0 22px;
+
+    white-space: nowrap;
+
+}
+
+
+
+/* =====================================================
+   DASHBOARD CHART
+===================================================== */
+
+.dashboard-chart {
+
+    width: 100%;
+
+    min-height: 400px;
+
+}
+
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.dashboard-modal {
+
+    z-index: 1055;
+
+}
+
+
+.dashboard-modal .modal-content {
+
+    border: none;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+
+}
+
+
+.dashboard-modal .modal-header {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary),
+            var(--accent)
+        );
+
+    color: white;
+
+    border: none;
+
+}
+
+
+.dashboard-modal .modal-title {
+
+    font-weight: 700;
+
+}
+
+
+.dashboard-modal .modal-header .btn-close {
+
+    filter: brightness(0) invert(1);
+
+}
+
+
+.dashboard-modal .modal-footer {
+
+    border-top: 1px solid var(--border);
+
+}
+
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.badge {
+
+    border-radius: 20px;
+
+    padding: 8px 14px;
+
+    font-size: 13px;
+
+}
+
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+
+    position: relative;
+
+}
+
+
+.search-box i {
+
+    position: absolute;
+
+    top: 16px;
+
+    left: 16px;
+
+    color: #999;
+
+}
+
+
+.search-box input {
+
+    padding-left: 42px;
+
+}
+
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar {
+
+    width: 10px;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+
+        linear-gradient(
+            var(--primary),
+            var(--accent)
+        );
+
+    border-radius: 20px;
+
+}
+
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.fade-up {
+
+    animation:
+        fadeUp .5s ease;
+
+}
+
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RESPONSIVE NAVBAR
+   TABLET + MOBILE
 ===================================================== */
 
 @media (max-width: 991.98px) {
+
 
     .navbar {
 
@@ -584,9 +789,7 @@ h4{
     }
 
 
-    /* =========================
-       BRAND
-    ========================= */
+    /* BRAND */
 
     .navbar-brand {
 
@@ -601,9 +804,7 @@ h4{
     }
 
 
-    /* =========================
-       LOGO
-    ========================= */
+    /* LOGO */
 
     .playtopia-logo {
 
@@ -620,9 +821,7 @@ h4{
     }
 
 
-    /* =========================
-       HAMBURGER
-    ========================= */
+    /* HAMBURGER */
 
     .navbar-toggler {
 
@@ -640,15 +839,13 @@ h4{
     .navbar-toggler:focus {
 
         box-shadow:
-
-        0 0 0 .2rem rgba(255,255,255,.25);
+            0 0 0 .2rem
+            rgba(255,255,255,.25);
 
     }
 
 
-    /* =========================
-       MOBILE MENU
-    ========================= */
+    /* MOBILE MENU */
 
     .navbar-collapse {
 
@@ -659,15 +856,13 @@ h4{
         padding: 10px 0 8px;
 
         border-top:
-
-        1px solid rgba(255,255,255,.25);
+            1px solid
+            rgba(255,255,255,.25);
 
     }
 
 
-    /* =========================
-       NAV LIST
-    ========================= */
+    /* NAV LIST */
 
     .navbar-nav {
 
@@ -685,9 +880,7 @@ h4{
     }
 
 
-    /* =========================
-       NAV LINK
-    ========================= */
+    /* NAV LINK */
 
     .nav-link {
 
@@ -718,6 +911,8 @@ h4{
 
         width: 25px;
 
+        min-width: 25px;
+
         text-align: center;
 
         flex-shrink: 0;
@@ -727,40 +922,39 @@ h4{
 
     .nav-link:hover {
 
-        background: rgba(255,255,255,.15);
+        background:
+            rgba(255,255,255,.15);
 
         color: #ffffff !important;
 
     }
 
 
-    /* =========================
-       ACTIVE MENU
-    ========================= */
+    /* ACTIVE */
 
     .nav-link.active {
 
         background: #ffffff;
 
-        color: var(--primary) !important;
+        color:
+            var(--primary) !important;
 
         box-shadow:
-
-        0 5px 15px rgba(0,0,0,.12);
+            0 5px 15px
+            rgba(0,0,0,.12);
 
     }
 
 
     .nav-link.active i {
 
-        color: var(--primary) !important;
+        color:
+            var(--primary) !important;
 
     }
 
 
-    /* =========================
-       LOGOUT
-    ========================= */
+    /* LOGOUT */
 
     .navbar-logout {
 
@@ -774,25 +968,98 @@ h4{
 
     }
 
+
+    /* PERIOD */
+
+    .period-select {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .period-add-button {
+
+        width: 100%;
+
+    }
+
+
+    /* TITLE */
+
+    h2 {
+
+        font-size: 34px;
+
+    }
+
+
+    /* RATING */
+
+    .rating-card {
+
+        padding:
+            26px 20px;
+
+    }
+
+
+    .rating-card-icon {
+
+        font-size: 54px;
+
+    }
+
+
+    .rating-card h5 {
+
+        font-size: 24px;
+
+    }
+
+
+    .rating-card p {
+
+        font-size: 16px;
+
+        line-height: 1.7;
+
+    }
+
 }
 
 
+
 /* =====================================================
-   VERY SMALL MOBILE
+   MOBILE PHONE
 ===================================================== */
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+
+
+    body {
+
+        overflow-x: hidden;
+
+    }
+
 
     .navbar {
 
-        padding: 9px 10px;
+        padding:
+            9px 10px;
 
     }
 
 
     .navbar-brand {
 
-        font-size: 18px !important;
+        font-size:
+            18px !important;
+
+        gap: 8px;
 
     }
 
@@ -803,12 +1070,172 @@ h4{
 
         height: 42px;
 
+        border-radius: 11px;
+
     }
 
 
     .navbar-toggler {
 
-        padding: 6px 8px;
+        padding:
+            6px 8px;
+
+    }
+
+
+    /* DASHBOARD TITLE */
+
+    .dashboard-title {
+
+        margin-top: 4px;
+
+    }
+
+
+    .dashboard-title h2 {
+
+        font-size: 29px;
+
+        line-height: 1.2;
+
+    }
+
+
+    .dashboard-title p {
+
+        font-size: 14px;
+
+    }
+
+
+    /* CARD */
+
+    .card {
+
+        border-radius: 20px;
+
+    }
+
+
+    .card-header {
+
+        font-size: 20px;
+
+        padding:
+            17px 18px;
+
+    }
+
+
+    /* RATING CARD */
+
+    .rating-card {
+
+        padding:
+            28px 18px;
+
+    }
+
+
+    .rating-card-icon {
+
+        font-size: 52px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .rating-card h5 {
+
+        font-size: 22px;
+
+        line-height: 1.3;
+
+    }
+
+
+    .rating-card p {
+
+        font-size: 15.5px;
+
+        line-height: 1.75;
+
+        margin-top: 14px;
+
+    }
+
+
+    .rating-card p::before {
+
+        width: 90%;
+
+        margin-bottom: 16px;
+
+    }
+
+
+    /* PERIOD */
+
+    .period-select {
+
+        height: 52px;
+
+    }
+
+
+    /* CHART */
+
+    .dashboard-chart {
+
+        min-height: 330px;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   VERY SMALL PHONE
+===================================================== */
+
+@media (max-width: 400px) {
+
+
+    .navbar-brand {
+
+        font-size: 17px !important;
+
+    }
+
+
+    .playtopia-logo {
+
+        width: 40px;
+
+        height: 40px;
+
+    }
+
+
+    .dashboard-title h2 {
+
+        font-size: 26px;
+
+    }
+
+
+    .rating-card h5 {
+
+        font-size: 20px;
+
+    }
+
+
+    .rating-card p {
+
+        font-size: 15px;
 
     }
 
