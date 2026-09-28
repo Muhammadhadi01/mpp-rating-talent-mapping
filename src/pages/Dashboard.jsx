@@ -595,24 +595,27 @@ export default function Dashboard() {
 
                     <div className="col-md-4 mb-3">
 
-                        <RatingCard
-                            title="PERFORMA"
-                            subtitle="Kinerja"
-                            description="Mengukur hasil pekerjaan, produktivitas, kualitas kerja, dan pencapaian target karyawan."
-                            icon="⭐"
-                        />
+                       
+                    <RatingCard
+    icon="⭐"
+    title="PERFORMANCE (PF)"
+    subtitle="Performance"
+    description="Akurasi transaksi kasir, kepatuhan SOP keselamatan wahana, ketelitian laporan harian, dan kebersihan area kerja."
+/>
 
-                    </div>
+<RatingCard
+    icon="👑"
+    title="POTENTIAL (PT)"
+    subtitle="Potential"
+    description="Kemampuan problem solving saat ada kendala di lapangan, kemauan belajar hal baru, komunikasi antar tim, dan inisiatif mengambil tanggung jawab lebih."
+/>
 
-
-                    <div className="col-md-4 mb-3">
-
-                        <RatingCard
-                            title="KEPEMIMPINAN"
-                            subtitle="Leadership"
-                            description="Mengukur kemampuan memimpin, mengambil keputusan, dan mengarahkan anggota tim."
-                            icon="👑"
-                        />
+<RatingCard
+    icon="🤝"
+    title="BEHAVIOR (BV)"
+    subtitle="Behavior"
+    description="Kecepatan dan keramahan pelayanan (hospitality ke customer), kejujuran/integritas (penanganan aset & uang), serta etika menghargai rekan kerja dan atasan."
+/>
 
                     </div>
 
