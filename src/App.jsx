@@ -24,7 +24,6 @@ export default function App() {
                     element={<Login />}
                 />
 
-
                 {/* =========================
                     DASHBOARD
                 ========================= */}
@@ -36,7 +35,6 @@ export default function App() {
                         </ProtectedRoute>
                     }
                 />
-
 
                 {/* =========================
                     KARYAWAN
@@ -50,7 +48,6 @@ export default function App() {
                     }
                 />
 
-
                 {/* =========================
                     PENILAIAN
                 ========================= */}
@@ -62,7 +59,6 @@ export default function App() {
                         </ProtectedRoute>
                     }
                 />
-
 
                 {/* =========================
                     TALENT MAPPING
@@ -76,9 +72,8 @@ export default function App() {
                     }
                 />
 
-
                 {/* =========================
-                    RANKING / HISTORY PENILAIAN
+                    RANKING
                 ========================= */}
                 <Route
                     path="/ranking"
@@ -88,7 +83,6 @@ export default function App() {
                         </ProtectedRoute>
                     }
                 />
-
 
                 {/* =========================
                     GRAFIK
