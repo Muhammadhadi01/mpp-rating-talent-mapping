@@ -104,7 +104,7 @@ body{
 
     height:55px;
 
-     margin-left:9px;
+    margin-left:9px;
 
     background:white;
 
@@ -560,6 +560,8 @@ h4{
 
     }
 
+}
+
 
 
 /* =====================================================
@@ -656,11 +658,16 @@ h4{
 
         margin-top: 12px;
 
-        padding: 10px 0 8px;
+        padding: 10px;
 
-        border-top:
+        background: #ffffff;
 
-        1px solid rgba(255,255,255,.25);
+        border-radius: 14px;
+
+        border-top: none;
+
+        box-shadow:
+        0 8px 20px rgba(0,0,0,.12);
 
     }
 
@@ -697,7 +704,7 @@ h4{
 
         width: 100%;
 
-        color: #ffffff !important;
+        color: #263238 !important;
 
         font-size: 16px;
 
@@ -722,14 +729,23 @@ h4{
 
         flex-shrink: 0;
 
+        color: #263238 !important;
+
     }
 
 
     .nav-link:hover {
 
-        background: rgba(255,255,255,.15);
+        background: #F1F5FF;
 
-        color: #ffffff !important;
+        color: var(--primary) !important;
+
+    }
+
+
+    .nav-link:hover i {
+
+        color: var(--primary) !important;
 
     }
 
@@ -740,13 +756,11 @@ h4{
 
     .nav-link.active {
 
-        background: #ffffff;
+        background: #EEF4FF;
 
         color: var(--primary) !important;
 
-        box-shadow:
-
-        0 5px 15px rgba(0,0,0,.12);
+        box-shadow: none;
 
     }
 
@@ -775,6 +789,7 @@ h4{
     }
 
 }
+
 
 
 /* =====================================================
@@ -812,4 +827,4 @@ h4{
 
     }
 
-}}
+}
